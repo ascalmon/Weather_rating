@@ -18,17 +18,25 @@ class Weather extends Component {
     temp_min: 0
   }
 
-  changeStarColor = (e) => {
-    let item = document.getElementById(e.target.id).className;
-    console.log(e.target.id, item);
-    if (item === 'fas fa-star' || item === 'fa-star fas') {
-      document.getElementById(e.target.id).classList.remove('fas');
-      document.getElementById(e.target.id).classList.add('far');
-    } else {
-      document.getElementById(e.target.id).classList.remove('far');
-      document.getElementById(e.target.id).classList.add('fas');
+  getCityName = (event) => {
+    console.log(event.target.value);
+  }
+
+  changeStarColor = (event) => {
+    //let item = document.getElementById(event.target.id).className;
+    let actual = event.target.id;
+    console.log(actual);
+    for (let i = actual; i >= 1; i--){
+      let item = document.getElementById(i);
+      item.classList.replace('far', 'fas');
     }
-    console.log(e.target.id);
+    console.log("Final");
+    actual++;
+    for (let j = actual; j < 6; j++){
+     //console.log(j);
+      let item = document.getElementById(j);
+      item.classList.replace('fas', 'far');
+    }
   }
 
 
@@ -39,7 +47,7 @@ class Weather extends Component {
       .get(
         `https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/weather?q=${this.state.city},${this.state.countryCode}&apikey=${API_KEY}`)
         .then(res => {
-          console.log(res.data);
+          //console.log(res.data);
           this.setState({country: res.data.sys.country});
           this.setState({city: res.data.name});
           this.setState({humidity: res.data.main.humidity});
@@ -82,10 +90,10 @@ class Weather extends Component {
               <i className="far fa-star" id="4"/>
               <i className="far fa-star" id="5"/>
             </button>
-
+            <input type="text" placeholder="Enter city name" onClick={this.getCityName}
           </form>
-
-          <a href="#/" className="btn btn-primary btn-block">Enter city name</a>
+          <br />
+          <a href="/" className="btn btn-primary center">Enter city name</a>
         </div>
       </div>
     )
