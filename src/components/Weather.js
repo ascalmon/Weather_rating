@@ -106,32 +106,36 @@ class Weather extends Component {
 
   render() {
     return (
-      <div className="card">
+      <div className="center">
         <img className="card-img-top weather_card" src={weather} alt="Card" />
-        <div className="card">
+        <div className="card center" style={{width:'70%'}}>
           <React.Fragment>
             <h5 className="card-title text-center">Weather Condition for: <strong style={{color:'red'}}>{this.state.city} - {this.state.countryShow}</strong></h5>
             <h5 className="card-title text-center"><strong style={{color:'blue'}}>Weather: {this.state.weather}</strong></h5>
             <h5 className="card-title text-center"><strong style={{color:'#cccc00'}}>Sunrise: {this.state.sunrise}</strong></h5>
             <h5 className="card-title text-center"><strong style={{color:'gray'}}>Sunset: {this.state.sunset}</strong></h5>
           </React.Fragment>
-          <ul className="card">
+        </div>
+        <br />
+        <div className="card center" style={{width:'70%'}}>
+          <ul className="">
             <li className="text-center card-title">
-              <p className="card-text">Temperature: {Math.round(this.state.temp - 273.15)}</p>
+              <p className="card-text card_data">Temperature: {Math.round(this.state.temp - 273.15)}</p>
             </li>
             <li className="text-center card-title">
-              <p className="card-text">Max Temp.: {Math.round(this.state.temp_max- 273.15)}</p>
+              <p className="card-text card_data">Max Temp.: {Math.round(this.state.temp_max- 273.15)}</p>
             </li>
             <li className="text-center card-title">
-              <p className="card-text">Min Temp.: {Math.round(this.state.temp_min- 273.15)}</p>
+              <p className="card-text card_data">Min Temp.: {Math.round(this.state.temp_min- 273.15)}</p>
             </li>
             <li className="text-center card-title">
-              <p className="card-text">Humidity: {this.state.humidity} %</p>
+              <p className="card-text card_data">Humidity: {this.state.humidity} %</p>
             </li>
             <li className="text-center card-title">
-              <p className="card-text">Pressure: {this.state.pressure} hpa</p>
+              <p className="card-text card_data">Pressure: {this.state.pressure} hpa</p>
             </li>
           </ul>
+        </div>
           <form>
             <button type="button" id="star1" className="center" onClick={this.changeStarColor}>
               <i className="fas fa-star" id="1"/>
@@ -152,7 +156,6 @@ class Weather extends Component {
           <br />
           <button type="submit" className="btn btn-primary center" onClick={this.onSubmit}>Search
           </button>
-        </div>
       </div>
     )
   }

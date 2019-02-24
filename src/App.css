@@ -1,6 +1,9 @@
 .weather_card {
-  width: 60vh;
-  margin: auto;
+  width: 50vh;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-bottom: 5vh;
 }
 
 ul{
@@ -11,4 +14,15 @@ list-style-type:none;
   margin-right: auto;
   margin-left: auto;
   display: table;
+}
+
+.card_data {
+  width: 100%;
+  text-align: center;
+  font-size: 2.5vh;
+  font-style: normal;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: lightgray;
+  margin-left: -2.5vh;
 }
