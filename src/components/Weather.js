@@ -8,6 +8,7 @@ class Weather extends Component {
     country: 'Brazil',
     countryCode: 'br',
     city: 'Barueri',
+    citySearch: '',
     date: Date.now,
     lat: 0,
     long: 0,
@@ -20,17 +21,23 @@ class Weather extends Component {
 
   getCityName = (event) => {
     console.log(event.target.value);
+    this.setState({citySearch: event.target.value});
   }
+
+  onSubmit = (event) => {
+    console.log('Submit', this.state.citySearch);
+  }
+
 
   changeStarColor = (event) => {
     //let item = document.getElementById(event.target.id).className;
     let actual = event.target.id;
-    console.log(actual);
+    //console.log(actual);
     for (let i = actual; i >= 1; i--){
       let item = document.getElementById(i);
       item.classList.replace('far', 'fas');
     }
-    console.log("Final");
+    //console.log("Final");
     actual++;
     for (let j = actual; j < 6; j++){
      //console.log(j);
@@ -90,10 +97,12 @@ class Weather extends Component {
               <i className="far fa-star" id="4"/>
               <i className="far fa-star" id="5"/>
             </button>
-            <input type="text" placeholder="Enter city name" onClick={this.getCityName}
+            <br />
+            <input className="center" type="text" placeholder="Enter city name" onChange={this.getCityName} />
           </form>
           <br />
-          <a href="/" className="btn btn-primary center">Enter city name</a>
+          <button type="submit" className="btn btn-primary center" onClick={this.onSubmit}>Search
+          </button>
         </div>
       </div>
     )
