@@ -5,10 +5,11 @@ import weather from './weather.png';
 
 class Weather extends Component {
   state = {
-    country: 'Brazil',
-    countryCode: 'br',
-    city: 'Barueri',
-    citySearch: '',
+    country: 'Canada',
+    countryCode: '',
+    countryShow: 'CA',
+    city: 'Toronto',
+    citySearch: 'Toronto',
     date: Date.now,
     lat: 0,
     long: 0,
@@ -16,77 +17,119 @@ class Weather extends Component {
     pressure: 0,
     temp: 0,
     temp_max: 0,
-    temp_min: 0
+    temp_min: 0,
+    weather: '',
+    sunrise: '',
+    sunset: ''
   }
 
+
+  componentDidMount() {
+    const API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
+    let code = this.state.countryCode;
+    let country_valid = true;
+
+      if (this.state.citySearch !== '' && this.state.country !== ''){
+        //console.log(`ttps://restcountries.eu/rest/v2/name/${this.state.country}`);
+        axios
+        .get(
+          `https://restcountries.eu/rest/v2/name/${this.state.country}`)
+          .then(res => {
+            //console.log(res.data);
+            this.setState({countryCode: res.data[0].alpha2Code});
+            code = `,${res.data[0].alpha2Code}`;
+            this.setState({country: res.data[0].name});
+            //console.log('Country' , this.state.country, 'Code' , code);
+          })
+          .catch(err => {
+            //console.log(err);
+            country_valid = false;
+          })
+
+        if (country_valid !== false){
+          axios
+          .get(
+            `https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/weather?q=${this.state.citySearch}&${code}$units=metric&apikey=${API_KEY}`)
+            .then(res => {
+              //console.log(res.data);
+              this.setState({countryShow: res.data.sys.country});
+              this.setState({weather: res.data.weather[0].description});
+              let dateSunrise = new Date(res.data.sys.sunrise * 1000).toLocaleTimeString("en-US");
+              this.setState({sunrise: dateSunrise});
+              let dateSunset = new Date(res.data.sys.sunset * 1000).toLocaleTimeString("en-US");
+              this.setState({sunset: dateSunset});
+              this.setState({city: res.data.name});
+              this.setState({humidity: res.data.main.humidity});
+              this.setState({pressure: res.data.main.pressure});
+              this.setState({temp: res.data.main.temp});
+              this.setState({temp_max: res.data.main.temp_max});
+              this.setState({temp_min: res.data.main.temp_min});
+            })
+            .catch(err => {
+              //console.log(err);
+
+            });
+        }
+      }
+    }
+
   getCityName = (event) => {
-    console.log(event.target.value);
     this.setState({citySearch: event.target.value});
+  }
+  getCountryName = (event) => {
+    this.setState({country: event.target.value});
   }
 
   onSubmit = (event) => {
-    console.log('Submit', this.state.citySearch);
+    this.componentDidMount();
+    var x = document.getElementById("city");
+    var y = document.getElementById("country");
+    x.value = '';
+    y.value = '';
+
   }
 
 
   changeStarColor = (event) => {
-    //let item = document.getElementById(event.target.id).className;
     let actual = event.target.id;
-    //console.log(actual);
     for (let i = actual; i >= 1; i--){
       let item = document.getElementById(i);
       item.classList.replace('far', 'fas');
     }
-    //console.log("Final");
     actual++;
     for (let j = actual; j < 6; j++){
-     //console.log(j);
       let item = document.getElementById(j);
       item.classList.replace('fas', 'far');
     }
   }
 
 
-
-  componentDidMount() {
-    const API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
-      axios
-      .get(
-        `https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/weather?q=${this.state.city},${this.state.countryCode}&apikey=${API_KEY}`)
-        .then(res => {
-          //console.log(res.data);
-          this.setState({country: res.data.sys.country});
-          this.setState({city: res.data.name});
-          this.setState({humidity: res.data.main.humidity});
-          this.setState({pressure: res.data.main.pressure});
-          this.setState({temp: res.data.main.temp});
-          this.setState({temp_max: res.data.main.temp_max});
-          this.setState({temp_min: res.data.main.temp_min});
-        })
-        .catch(err => console.log(err));
-    }
-
   render() {
     return (
       <div className="card">
         <img className="card-img-top weather_card" src={weather} alt="Card" />
-        <div className="card-body">
-          <h5 className="card-title text-center">Weather Condition for: <strong style={{color:'red'}}>{this.state.city}</strong></h5>
-          <ul>
-            <li className="text-center">
-              <p className="card-text">Temperature: {Math.floor(this.state.temp / 10)}</p>
+        <div className="card">
+          <React.Fragment>
+            <h5 className="card-title text-center">Weather Condition for: <strong style={{color:'red'}}>{this.state.city} - {this.state.countryShow}</strong></h5>
+            <h5 className="card-title text-center"><strong style={{color:'blue'}}>Weather: {this.state.weather}</strong></h5>
+            <h5 className="card-title text-center"><strong style={{color:'#cccc00'}}>Sunrise: {this.state.sunrise}</strong></h5>
+            <h5 className="card-title text-center"><strong style={{color:'gray'}}>Sunset: {this.state.sunset}</strong></h5>
+          </React.Fragment>
+          <ul className="card">
+            <li className="text-center card-title">
+              <p className="card-text">Temperature: {Math.round(this.state.temp - 273.15)}</p>
             </li>
-            <li className="text-center">
-              <p className="card-text">Max Temp.: {Math.floor(this.state.temp_max / 10)}</p>
+            <li className="text-center card-title">
+              <p className="card-text">Max Temp.: {Math.round(this.state.temp_max- 273.15)}</p>
             </li>
-            <li className="text-center">
-              <p className="card-text">Min Temp.: {Math.floor(this.state.temp_min / 10)}</p>
+            <li className="text-center card-title">
+              <p className="card-text">Min Temp.: {Math.round(this.state.temp_min- 273.15)}</p>
             </li>
-            <li className="text-center">
-              <p className="card-text">Humidity: {this.state.humifity}</p>
+            <li className="text-center card-title">
+              <p className="card-text">Humidity: {this.state.humidity} %</p>
             </li>
-            <li className="text-center">
-              <p className="card-text">Pressure: {this.state.pressure}</p>
+            <li className="text-center card-title">
+              <p className="card-text">Pressure: {this.state.pressure} hpa</p>
             </li>
           </ul>
           <form>
@@ -98,7 +141,13 @@ class Weather extends Component {
               <i className="far fa-star" id="5"/>
             </button>
             <br />
-            <input className="center" type="text" placeholder="Enter city name" onChange={this.getCityName} />
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="">City and Country Name</span>
+              </div>
+              <input type="text" id="city"    className="form-control" onChange={this.getCityName}  />
+              <input type="text" id="country" className="form-control" onChange={this.getCountryName}/>
+            </div>
           </form>
           <br />
           <button type="submit" className="btn btn-primary center" onClick={this.onSubmit}>Search
