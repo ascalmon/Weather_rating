@@ -34,7 +34,7 @@ class Weather extends Component {
     .get(
       `https://cors-anywhere.herokuapp.com/https://react-api-ascalmon.herokuapp.com/users/1`)
       .then(res => {
-        console.log(res.data);
+        //console.log(res.data);
         this.setState({owner: res.data.username});
       })
 
@@ -121,37 +121,38 @@ class Weather extends Component {
     return (
       <div className="center">
         <img className="card-img-top weather_card" src={weather} alt="Card" />
-        <div className="card center" style={{width:'70%'}}>
+        <div className="card center">
           <React.Fragment>
-            <h5 className="card-title text-center">Weather Condition for: <strong style={{color:'red'}}>{this.state.city} - {this.state.countryShow}</strong></h5>
-            <p className="card-title text-center">Requested by: <small style={{color:'red'}}>{this.state.owner}</small></p>
-            <h5 className="card-title text-center"><strong style={{color:'blue'}}>Weather: {this.state.weather}</strong></h5>
-            <h5 className="card-title text-center"><strong style={{color:'#cccc00'}}>Sunrise: {this.state.sunrise}</strong></h5>
-            <h5 className="card-title text-center"><strong style={{color:'gray'}}>Sunset: {this.state.sunset}</strong></h5>
+            <h5 className="card-title text-center card_data">Weather Condition for: <strong style={{color:'red'}}>{this.state.city} - {this.state.countryShow}</strong></h5>
+            <p className="card-title text-center card_data">Requested by: <small style={{color:'red'}}>{this.state.owner}</small></p>
+            <h5 className="card-title text-center card_data"><strong style={{color:'blue'}}>Weather: {this.state.weather}</strong></h5>
+            <h5 className="card-title text-center card_data"><strong style={{color:'#cccc00'}}>Sunrise: {this.state.sunrise}</strong></h5>
+            <h5 className="card-title text-center card_data"><strong style={{color:'gray'}}>Sunset: {this.state.sunset}</strong></h5>
           </React.Fragment>
         </div>
-        <br />
-        <div className="card center" style={{width:'70%'}}>
+
+        <div className="card center">
           <ul className="">
-            <li className="text-center card-title">
+            <li className="center card-title">
               <p className="card-text card_data">Temperature: {Math.round(this.state.temp - 273.15)}</p>
             </li>
-            <li className="text-center card-title">
+            <li className="center card-title">
               <p className="card-text card_data">Max Temp.: {Math.round(this.state.temp_max- 273.15)}</p>
             </li>
-            <li className="text-center card-title">
+            <li className="center card-title">
               <p className="card-text card_data">Min Temp.: {Math.round(this.state.temp_min- 273.15)}</p>
             </li>
-            <li className="text-center card-title">
+            <li className="center card-title">
               <p className="card-text card_data">Humidity: {this.state.humidity} %</p>
             </li>
-            <li className="text-center card-title">
+            <li className="center card-title">
               <p className="card-text card_data">Pressure: {this.state.pressure} hpa</p>
             </li>
           </ul>
         </div>
-          <form>
-            <button type="button" id="star1" className="center" onClick={this.changeStarColor}>
+        <br />
+          <form className="">
+            <button type="button" id="star1" className="star" onClick={this.changeStarColor}>
               <i className="fas fa-star" id="1"/>
               <i className="far fa-star" id="2"/>
               <i className="far fa-star" id="3"/>
@@ -159,9 +160,10 @@ class Weather extends Component {
               <i className="far fa-star" id="5"/>
             </button>
             <br />
+            <br />
             <div className="input-group">
               <div className="input-group-prepend">
-                <span className="input-group-text" id="">City and Country Name</span>
+                <span className="input-group-text" id="">City and Country</span>
               </div>
               <input type="text" id="city"    className="form-control" onChange={this.getCityName}  />
               <input type="text" id="country" className="form-control" onChange={this.getCountryName}/>
