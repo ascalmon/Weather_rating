@@ -20,7 +20,8 @@ class Weather extends Component {
     temp_min: 0,
     weather: '',
     sunrise: '',
-    sunset: ''
+    sunset: '',
+    owner: ''
   }
 
 
@@ -28,6 +29,18 @@ class Weather extends Component {
     const API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
     let code = this.state.countryCode;
     let country_valid = true;
+
+    axios
+    .get(
+      `https://cors-anywhere.herokuapp.com/https://react-api-ascalmon.herokuapp.com/users/1`)
+      .then(res => {
+        console.log(res.data);
+        this.setState({owner: res.data.username});
+      })
+
+      .catch(err => {
+        console.log(err);
+      })
 
       if (this.state.citySearch !== '' && this.state.country !== ''){
         //console.log(`ttps://restcountries.eu/rest/v2/name/${this.state.country}`);
@@ -111,6 +124,7 @@ class Weather extends Component {
         <div className="card center" style={{width:'70%'}}>
           <React.Fragment>
             <h5 className="card-title text-center">Weather Condition for: <strong style={{color:'red'}}>{this.state.city} - {this.state.countryShow}</strong></h5>
+            <p className="card-title text-center">Requested by: <small style={{color:'red'}}>{this.state.owner}</small></p>
             <h5 className="card-title text-center"><strong style={{color:'blue'}}>Weather: {this.state.weather}</strong></h5>
             <h5 className="card-title text-center"><strong style={{color:'#cccc00'}}>Sunrise: {this.state.sunrise}</strong></h5>
             <h5 className="card-title text-center"><strong style={{color:'gray'}}>Sunset: {this.state.sunset}</strong></h5>
